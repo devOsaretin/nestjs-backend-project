@@ -3,15 +3,18 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from './dtos/user.dto';
 
+@Serialize(UserDto)
 @Controller('auth')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -23,7 +26,10 @@ export class UsersController {
 
   @Get('/:id')
   findUser(@Param('id') id: string) {
-    return this.usersService.findOne(parseInt(id));
+    const user = this.usersService.findOne(parseInt(id));
+    if (!user) throw new NotFoundException();
+
+    return user;
   }
 
   @Patch('/:id')
