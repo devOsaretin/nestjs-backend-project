@@ -1,12 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
-import {
-  BadGatewayException,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -18,7 +13,7 @@ describe('AuthService', () => {
     mockUsersService = {
       find: () => Promise.resolve([]),
       create: (email: string, password: string) =>
-        Promise.resolve({ id: 1, email, password } as User),
+        Promise.resolve({ id: 1, email, password }),
     };
     const module = await Test.createTestingModule({
       providers: [
@@ -51,9 +46,17 @@ describe('AuthService', () => {
     ).rejects.toThrow(BadRequestException);
   });
 
-  it('throws if signin is called with an unused email', async () => {
+  it('throws an error if signin is called with an unused email', async () => {
     await expect(
       service.signin('testEmail@mail.com', testPassword),
     ).rejects.toThrow(NotFoundException);
+  });
+
+  it('throws an error if an invalid password is provided', async () => {
+    mockUsersService.find = () =>
+      Promise.resolve([{ id: 1, email: testEmail, password: testPassword }]);
+    await expect(service.signin(testEmail, 'wrongpassword')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });
