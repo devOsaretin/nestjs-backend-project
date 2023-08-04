@@ -30,4 +30,18 @@ describe('AppController (e2e)', () => {
         expect(email).toEqual(testEmail);
       });
   });
+
+  it('signup as a new user then get the currenctly logged in user', async () => {
+    const _request = request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({ testEmail, testPassword })
+      .expect(201);
+
+    const cookie = _request.get('Set-Cookie');
+    const { body } = await request(app.getHttpServer())
+      .get('/auth/user')
+      .set('Cookie', cookie)
+      .expect(200);
+    expect(body.email).toEqual(testEmail);
+  });
 });
