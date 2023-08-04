@@ -10,7 +10,12 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-
+    "paths": {
+      "@interceptors/*": ["src/interceptors/*"],
+      "@users/*": ["src/users/*"],
+      "@guards/*": ["src/guards/*"]
+      // Add more aliases as needed
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -18,5 +23,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["src", "test"]
 }

@@ -1,0 +1,21 @@
+POST http://localhost:3000/reports
+Content-Type: application/json
+
+{
+  "make": "Benz",
+  "model": "Maybach",
+  "year": 2023,
+  "mileage": 1000,
+  "price": 5000000,
+  "lng": 0,
+  "lat": 0
+}
+
+
+# POST http://localhost:3000/auth/signin
+# Content-Type: application/json
+
+# {
+# "email": "osaretin@mail.com",
+# "password": "password"
+# }
